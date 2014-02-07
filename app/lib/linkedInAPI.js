@@ -20,3 +20,9 @@ linkedInModule.init('tCTSMKiSV8XznPdD', '77klx3f1fgcdnb');
 linkedInModule.getUser(function(_d) {
     Ti.API.info(_d);
 });
+
+Alloy.Globals.liCall = function() {
+    linkedInModule.getUser(function(_d) {
+        Ti.API.info(_d);
+    });
+};
