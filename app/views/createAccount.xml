@@ -1,20 +1,17 @@
 <Alloy>
-  <Window class="container" backgroundColor="#1E1E1A">
+  <Window class="container" backgroundColor="#428ea7">
     <ScrollView>
       <View id="content" top="30dip" layout="vertical">
-        <TextField id="name" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="User Name"/>
+        <TextField id="name" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="User Name" />
         <TextField id="emailId" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="Email Address"/>
-        <TextField id="password" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="Password" passwordMask="true"/>
+        <TextField id="password" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="Password" passwordMask="true" />
         <TextField id="homeAddress" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="Home Address"/>
-        <TextField id="company" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="Company"/>
+        <TextField id="company" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" top="20dip" height="40dip" hintText="Company" visible="false"/>
 
-        <Button id="button" title="Submit" onClick="createAccount" top="20dip" width="100dip" height="44dip" borderRadius="2dip" backgroundColor="#1E1E1A" color="#DA3467"/>
-        <Button id="linkedIn" onClick="linkAccount" top="20dip" width="100dip" height="44dip" borderRadius="2dip" backgroundColor="#1E1E1A" color="#DA3467">LinkedIn</Button>
+        <Button id="button" title="Submit" onClick="createAccount" top="10dip" width="100dip" height="44dip" borderRadius="2dip" backgroundColor="#ffffff" color="#428ea7"/>
+        <Button id="linkedIn" onClick="linkAccount" top="10dip" width="245dip" height="44dip" borderRadius="2dip" backgroundColor="#1E1E1A" color="#DA3467" backgroundImage="linkedLoginBtn.png"></Button>
 
-        <View width="110dip" top="20dip" onClick="accountLogin">
-          <Label text="Account Login"/>
-        </View>
-        <View height="1dip" width="110dip" backgroundColor="#ffffff"/>
+        <View height="1dip" width="110dip" backgroundColor="#428ea7"/>
       </View>
     </ScrollView>
   </Window>
