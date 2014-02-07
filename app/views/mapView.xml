@@ -1,0 +1,13 @@
+<Alloy>
+  <Window class="container" backgroundColor="#9F1C1C" userLocation="true" top="0"
+    navBarHidden="true">
+    <View id="map" ns="Alloy.Globals.Map" top="0">
+    </View>
+    <View id="navigationView" top="0" backgroundColor="#1E1E1A" width="Ti.UI.FILL" height="60dip">
+      <Button id="add" title="+" height="44dip" width="44dip" right="5dip" onClick="addEvent"/>
+    </View>
+    <View id="eventView" bottom="0" backgroundColor="#1E1E1A" width="Ti.UI.FILL" height="Ti.UI.SIZE" layout="vertical" visible="false">
+      <TextField id="seats" borderStyle="Ti.UI.INPUT_BORDERSTYLE_ROUNDED" color="#336699" width="250dip" height="40dip" hintText="Number of seats"/>
+    </View>
+  </Window>
+</Alloy>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
+    <property name="acs-oauth-secret-production" type="string">tBYhOUKs5N32ltUHtG2no6KcbEzFdur2</property>
+    <property name="acs-oauth-key-production" type="string">Pb8I14vekLPhMBzagT15xMEeWmj917Sg</property>
+    <property name="acs-api-key-production" type="string">OROa6y2lox3Ioh678LqTN8AT8Gen6VFG</property>
+    <property name="acs-oauth-secret-development" type="string">kkGrvJ3ocd9YBoAwypS0EVpP45qwF4Fa</property>
+    <property name="acs-oauth-key-development" type="string">ffgmAWEEJ6Z9uTYy9vgh8yuL1OHgxtGL</property>
+    <property name="acs-api-key-development" type="string">Xr87iKoa0QpwQ47sajLN81JWqUpChb2t</property>
     <id>com.hacku.app</id>
     <name>HackU-App</name>
     <version>1.0</version>
@@ -38,7 +44,29 @@
             </dict>
         </plist>
     </ios>
-    <android xmlns:android="http://schemas.android.com/apk/res/android"/>
+    <android xmlns:android="http://schemas.android.com/apk/res/android">
+            <manifest>
+                <!-- Allows the API to download data from Google Map servers -->
+                <uses-permission android:name="android.permission.INTERNET"/>
+                <!-- Allows the API to cache data -->
+                <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+                <!-- Use GPS for device location -->
+                <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+                <!-- Use Wi-Fi or mobile connection for device location -->
+                <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+                <!-- Allows the API to access Google web-based services -->
+                <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+                <!-- Specify OpenGL ES 2.0 as a requirement -->
+                <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+                <!-- Replace <com.domain.appid> with your application ID -->
+                <uses-permission android:name="com.hacku.app.permission.MAPS_RECEIVE"/>
+                <permission android:name="com.hacku.app.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
+                <application>
+                    <!-- Replace "PASTE YOUR GOOGLE MAPS API KEY HERE" with the Google API key you obtained -->
+                    <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBNvvavJnhSyoJt5iq0YK3SBPtIKTe7hYc"/>
+                </application>
+            </manifest>
+        </android>
     <mobileweb>
         <precache/>
         <splash>
@@ -47,7 +75,12 @@
         </splash>
         <theme>default</theme>
     </mobileweb>
-    <modules/>
+    <modules>
+        <module platform="commonjs">ti.cloud</module>
+        <module platform="android">ti.cloudpush</module>
+        <module platform="iphone">ti.map</module>
+        <module platform="android">ti.map</module>
+    </modules>
     <deployment-targets>
         <target device="android">true</target>
         <target device="blackberry">false</target>
