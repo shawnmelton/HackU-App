@@ -9,26 +9,18 @@ white: false, quotmark: single, indent: 2, maxlen: 80 */
 
 var Cloud = require('ti.cloud');
 
-module.exports = function (newUser, callBack) {
+module.exports = function (loginCredentials, callBack) {
   Cloud.debug = true;
 
-  Cloud.Users.create({
-    username: newUser.emailId,
-    email: newUser.emailId,
-    password: newUser.password,
-    password_confirmation: newUser.password,
-    first_name: newUser.name,
-    last_name: newUser.name,
-    custom_fields : {
-      address : newUser.homeAddress,
-      comapany : newUser.company,
-      coordinates: [Number(newUser.latitude), Number(newUser.longitude)]
-    }
+  Cloud.Users.login({
+    login: loginCredentials.emailId,
+    password: loginCredentials.password,
   }, function (e) {
     if (e.success) {
       // user details.
       Ti.App.Properties.setObject('user', e.users[0]);
-      callBack('success');
+      callBack(e.users[0]);
+
     } else {
       console.log(JSON.stringify(e));
       callBack('failed');

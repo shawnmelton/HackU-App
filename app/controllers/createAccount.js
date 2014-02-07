@@ -52,7 +52,7 @@ function createAccount(event) {
 
     acsAccount(newUser, function (event) {
       if (event === 'success') {
-        $.createAccount.close();
+        // $.createAccount.close();
         Alloy.createController('mapView').getView().open();
 
       } else {
@@ -65,17 +65,23 @@ function createAccount(event) {
   });
 }
 
+function accountLogin() {
+
+  Alloy.createController('loginUser').getView().open();
+}
+
 /**
  * Populate form fields with the appropriate form informaiton.
  */
+
 function linkAccount() {
   var api = require('linkedInAPI');
-  api.getUser(function(user) {
-      user = JSON.parse(user);
-      $.name.value = user.firstName +' '+ user.lastName;
+  api.getUser(function (user) {
+    user = JSON.parse(user);
+    $.name.value = user.firstName + ' ' + user.lastName;
 
-      if(user.positions && user.positions.values[0]) {
-        $.company.value = user.positions.values[0].company.name;
-      }
+    if (user.positions && user.positions.values[0]) {
+      $.company.value = user.positions.values[0].company.name;
+    }
   });
 }
