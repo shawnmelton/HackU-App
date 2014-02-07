@@ -1,37 +1,55 @@
-/*global $, Alloy, alert, Ti, _, OS_IOS, OS_ANDROID, Promise */
-
-'use strict';
-
 
 Alloy.createController('createAccount').getView().open();
 // $.index.open();
 
-if (Ti.Platform.osname === 'iphone' || Ti.Platform.osname === 'ipad')
-{
-  var touchTestModule = undefined;
-  try
-  {
-    touchTestModule = require("com.soasta.touchtest");
-  }
-  catch (tt_exception)
-  {
-    Ti.API.error("com.soasta.touchest module is required");
-  }
-
-  var cloudTestURL = Ti.App.getArguments().url;
-  if (cloudTestURL != null)
-  {
-    // The URL will be null if we don't launch through TouchTest.
-    touchTestModule && touchTestModule.initTouchTest(cloudTestURL);
-  }
-
-  Ti.App.addEventListener('resumed',function(e)
-  {
-    // Hook the resumed from background
-    var cloudTestURL = Ti.App.getArguments().url;
-    if (cloudTestURL != null)
-    {
-      touchTestModule && touchTestModule.initTouchTest(cloudTestURL);
+$.index.addEventListener('focus', function(e) {
+  Ti.API.info('focused');
+    var value = Ti.App.Properties.getString('payload');
+    if (value){
+       Ti.API.info(value);
+       Titanium.App.Properties.removeProperty(value);
     }
-  });
+});
+
+// Require in the module
+var CloudPush = require('ti.cloudpush');
+var deviceToken = null;
+
+// Initialize the module
+CloudPush.retrieveDeviceToken({
+  success : deviceTokenSuccess,
+  error : deviceTokenError
+});
+
+
+
+// Enable push notifications for this device
+// Save the device token for subsequent API calls
+function deviceTokenSuccess(e) {
+  Ti.API.info('succesfuly registered');
+  CloudPush.enabled = true;
+  CloudPush.focusAppOnPush = true;
+  CloudPush.showTrayNotification = true;
+  CloudPush.showAppOnTrayClick = true;
+  //CloudPush.showTrayNotificationsWhenFocused = true;
+  //CloudPush.bubbleParent = true;
+  deviceToken = e.deviceToken;
+  Ti.App.Properties.setString('deviceToken', deviceToken);
 }
+
+function deviceTokenError(e) {
+  alert('Failed to register for push notifications! ' + e.error);
+}
+
+// Process incoming push notifications
+CloudPush.addEventListener('callback', function(evt) {
+
+  Ti.API.info('recived message: ' + evt.payload);
+  //toast.show();
+  //createNotification(evt.payload);
+  //Ti.App.Properties.setString('payload', evt.payload);
+  var foc = $.index.getVisible( );
+  if (foc){
+    Ti.API.info('message: ' + evt.payload);
+  }
+});

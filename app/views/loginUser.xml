@@ -7,4 +7,4 @@
       <Button id="button" title="Submit" onClick="loginUser" top="20dip" width="100dip" height="44dip" borderRadius="2dip" backgroundColor="#1E1E1A" color="#DA3467"/>
     </View>
   </Window>
-</Alloy>
+</Alloy>  
