@@ -1,0 +1,6 @@
+<Alloy>
+  <Window class="container" backgroundColor="#9F1C1C" userLocation="true" top="0">
+    <View id="map" ns="Alloy.Globals.Map" top="0">
+    </View>
+  </Window>
+</Alloy>
