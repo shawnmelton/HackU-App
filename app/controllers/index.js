@@ -2,9 +2,6 @@
 
 'use strict';
 
-/*function doClick(e) {
-  alert($.label.text);
-}*/
 
 Alloy.createController('createAccount').getView().open();
 // $.index.open();
