@@ -17,17 +17,12 @@ lat = Number(user.custom_fields.coordinates[0][0]);
 lng = Number(user.custom_fields.coordinates[0][1]);
 
 // user lat, long.
-$.map.region = {
-  latitude: lat,
-  longitude: lng,
-  longitudeDelta: 0.01,
-  latitudeDelta: 0.01
-};
+
 
 // replace this annotations with the acs annotation.
 // make a acs request of lat, long.
 
-var annotation = Alloy.Globals.Map.createAnnotation({
+/*var annotation = Alloy.Globals.Map.createAnnotation({
   latitude: lat,
   longitude: lng,
   title: user.first_name,
@@ -35,22 +30,52 @@ var annotation = Alloy.Globals.Map.createAnnotation({
   pincolor: Alloy.Globals.Map.ANNOTATION_RED,
   animate: true,
   user: user
-});
+});*/
 
-$.map.addAnnotation(annotation);
+// $.map.addAnnotation(annotation);
 console.log('user data form acs.');
 console.log(JSON.stringify(user));
 
 //TODO
 // need to pull all the requests.
-/*Cloud.Users.query({
+Cloud.Users.query({
   where: {
     coordinates: {'$nearSphere': [lat, lng], '$maxDistance': 0.00126}
   }
 }, function (e) {
   console.log(JSON.stringify(e));
-});*/
+  updateMapView(e);
+});
 
+var annotation, annotations = [];
+function updateMapView(acsData) {
+
+  $.map.region = {
+    latitude: Number(user.custom_fields.coordinates[0][0]),
+    longitude: Number(user.custom_fields.coordinates[0][1]),
+    longitudeDelta: 0.01,
+    latitudeDelta: 0.01
+  };
+
+  $.map.annotations = [];
+
+  _.each(acsData.users, function (userData) {
+    console.log(userData);
+    annotation = Alloy.Globals.Map.createAnnotation({
+      latitude: Number(userData.custom_fields.coordinates[0][0]) || '',
+      longitude: Number(userData.custom_fields.coordinates[0][1]) || '',
+      title: userData.first_name || '',
+      subtitle: userData.custom_fields.address || '',
+      pincolor: Alloy.Globals.Map.ANNOTATION_RED,
+      animate: true,
+      user: userData
+    });
+
+    annotations.push(annotation);
+  });
+
+  $.map.annotations = annotations;
+}
 
 function createEvent(event) {
 
@@ -60,7 +85,7 @@ function createEvent(event) {
     user: user.emailId,
     custom_fields: {
       address: user.homeAddress,
-      coordinates : [ Number(user.latitude), Number(user.longitude)],
+      coordinates : [lat, lng],
       seats: Number(event.seats),
       startTime: [Number(event.startHour), Number(event.startMin)],
       endTime: [event.endHour, event.endMin],
