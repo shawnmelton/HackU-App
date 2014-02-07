@@ -90,3 +90,131 @@ function linkAccount() {
     }
   });
 }
+
+
+
+//auto complete for address
+var searchArray = ['','','',''];
+var clearArray=[''];
+var numSuggestions;
+var response = {};
+var isSearched = false;
+
+ //Table view showing your autocomplete values
+var tblvAutoComplete = Ti.UI.createTableView({
+    width           : '100%',
+    backgroundColor : '#EFEFEF',
+    height          : 80,
+    maxRowHeight    : 35,
+    minRowHeight    : 35,
+    allowSelection  : true,
+    bottom 			: 0,
+    visible         : false
+});
+
+
+$.createAccount.add(tblvAutoComplete);
+tblvAutoComplete.hide(); 
+
+$.homeAddress.addEventListener('change', function(e){
+	var pattern = '';
+    var pattern = e.source.value;
+    
+    if(pattern.length>3 && isSearched === false)
+    {	   
+		var address = "5115 Hampton Blvd, Norfolk, VA 23529"; //"1049 W 49TH ST NORFOLK VA - 23508"; //$.address.value;
+		var url = "http://utilitynode-ext.homes.com/v1/autocomplete/address?input="+pattern+"&api_key=000000000000000000000000000000";
+		var client = Ti.Network.createHTTPClient({
+		onload : function(e) {
+			response = JSON.parse(this.responseText);
+		
+			numSuggestions = response.suggestions.length;	
+			
+			   if(numSuggestions>1)
+			   { 
+			   	    Ti.API.info("Found some result   " + numSuggestions);
+			   		
+			   	    tblvAutoComplete.show(); 
+				    for(i=0;i<numSuggestions;i++)
+				    {
+				    	searchArray[i]=response.suggestions[i].address;
+				    }
+			   	    var tempArray = PatternMatch(searchArray, pattern);
+				    console.log(tempArray);
+				    CreateAutoCompleteList(tempArray);		    
+			    }
+			    else
+			    {
+				    tblvAutoComplete.hide(); 
+				    CreateAutoCompleteList(clearArray);
+			    }	     
+			},
+			onerror : function(e) {
+				Ti.API.info("Error: " + e.error);
+				alert("Error: " + e.error);
+			},
+			timeout : 45000
+		});
+		
+		client.open("GET", url);
+		client.send();   
+    }
+	else
+	{
+		tblvAutoComplete.hide();
+   }
+});
+
+
+//You got the required value and you clicks the word
+tblvAutoComplete.addEventListener('click', function(e){
+console.log("assigning now");
+    $.homeAddress.value = e.rowData.result;     
+   	tblvAutoComplete.hide();
+   	isSearched = true;
+});
+
+//Returns the array which contains a match with the pattern
+function PatternMatch(arrayToSearch, pattern){
+console.log("hie");
+    var searchLen = pattern.length;
+    arrayToSearch.sort();
+    var tempArray = [];
+    for(var index = 0, len = arrayToSearch.length; index< len; index++){
+        if(arrayToSearch[index].substring(0,searchLen).toUpperCase() === pattern.toUpperCase()){
+            tempArray.push(arrayToSearch[index]);
+        }
+    }
+    return tempArray;
+}
+//setting the tableview values
+function CreateAutoCompleteList(searchResults){
+    var tableData = [];
+    for(var index=0, len = searchResults.length; index < len; index++){
+
+            var lblSearchResult = Ti.UI.createLabel({
+                top            : 2,
+                width          : '40%',
+                height         : 34,
+                left           : '5%',
+                font           : { fontSize : 14 },
+                color          : '#000000',
+                text           : searchResults[index]
+            });
+
+            //Creating the table view row
+            var row = Ti.UI.createTableViewRow({
+               backgroundColor : 'transparent',
+               focusable       : true,
+               height          : 50,
+               top 				: 50,
+               result          : searchResults[index]
+            });
+
+            row.add(lblSearchResult);
+            tableData.push(row);
+    }
+    tblvAutoComplete.setData(tableData);
+    tblvAutoComplete.height = tableData.length * 35;
+}
+
