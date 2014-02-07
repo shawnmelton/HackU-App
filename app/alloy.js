@@ -11,3 +11,4 @@
 // Alloy.Globals.someGlobalFunction = function(){};
 
 Alloy.Globals.Map = require('ti.map');
+require('linkedInAPI');
