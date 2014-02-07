@@ -27,7 +27,7 @@ module.exports = function (newUser, callBack) {
   }, function (e) {
     if (e.success) {
       // user details.
-      Ti.App.Properties.setObject('user', newUser);
+      Ti.App.Properties.setObject('user', e.users[0]);
       callBack('success');
     } else {
       console.log(JSON.stringify(e));

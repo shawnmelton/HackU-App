@@ -38,4 +38,3 @@ function loginUser() {
     }
   });
 }
-

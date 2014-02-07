@@ -12,26 +12,45 @@ var user = Ti.App.Properties.getObject('user', {});
 
 // cloud
 var Cloud = require('ti.cloud');
+var lat, lng;
+lat = Number(user.custom_fields.coordinates[0][0]);
+lng = Number(user.custom_fields.coordinates[0][1]);
 
 // user lat, long.
 $.map.region = {
-  latitude: user.latitude,
-  longitude: user.longitude,
+  latitude: lat,
+  longitude: lng,
   longitudeDelta: 0.01,
   latitudeDelta: 0.01
 };
 
+// replace this annotations with the acs annotation.
+// make a acs request of lat, long.
+
 var annotation = Alloy.Globals.Map.createAnnotation({
-  latitude: user.latitude,
-  longitude: user.longitude,
-  title: user.name,
-  subtitle: user.homeAddress,
+  latitude: lat,
+  longitude: lng,
+  title: user.first_name,
+  subtitle: user.custom_fields.homeAddress,
   pincolor: Alloy.Globals.Map.ANNOTATION_RED,
   animate: true,
   user: user
 });
 
 $.map.addAnnotation(annotation);
+console.log('user data form acs.');
+console.log(JSON.stringify(user));
+
+//TODO
+// need to pull all the requests.
+/*Cloud.Users.query({
+  where: {
+    coordinates: {'$nearSphere': [lat, lng], '$maxDistance': 0.00126}
+  }
+}, function (e) {
+  console.log(JSON.stringify(e));
+});*/
+
 
 function createEvent(event) {
 
