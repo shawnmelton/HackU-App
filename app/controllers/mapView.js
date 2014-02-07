@@ -48,6 +48,10 @@ Cloud.Events.query({
 });
 
 var annotation, annotations = [];
+function annotationClicked(event) {
+  console.log(JSON.stringify(event));
+}
+
 function updateMapView(acsEvents) {
 
   $.map.region = {
@@ -64,7 +68,7 @@ function updateMapView(acsEvents) {
     annotation = Alloy.Globals.Map.createAnnotation({
       latitude: Number(userEvent.custom_fields.coordinates[0][0]) || '',
       longitude: Number(userEvent.custom_fields.coordinates[0][1]) || '',
-      title: userEvent.custom_fields.userName + ' s: ' +
+      title: userEvent.custom_fields.username + ' s: ' +
       userEvent.custom_fields.seats,
       subtitle: userEvent.custom_fields.address || '',
       pincolor: Alloy.Globals.Map.ANNOTATION_RED,
@@ -74,11 +78,59 @@ function updateMapView(acsEvents) {
 
     annotations.push(annotation);
   });
+  $.map.addEventListener('click', function (evt) {
+
+    Ti.API.info('Annotation ' + JSON.stringify(evt) + ' clicked, id: ' +
+      evt.annotation.stateVisible);
+      //getNearData();
+    if (evt.annotation.stateVisible)
+    {
+      // evt.user
+    //Respond to existing event of user with notification
+    //subscribeToChannel();
+    //sendTestNotification();
+
+    }
+    evt.annotation.stateVisible =
+      (evt.annotation.stateVisible === false) ? true:false;
+  });
 
   $.map.annotations = annotations;
 }
 
+function subscribeToChannel(channel) {
+  // Subscribes the device to the 'test' channel
+  // Specify the push type as either 'android' for Android or 'ios' for iOS
+  Cloud.PushNotifications.subscribeToken({
+    device_token : deviceToken,
+    channel : channel,
+    user_id : 's4',
+    type : Ti.Platform.name == 'android' ? 'android' : 'ios'
+  }, function(e) {
+    if (e.success) {
+      alert('Subscribed');
+    } else {
+      alert('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+    }
+  });
+}
+
 function createEvent(event) {
+  // subscribeToChannel(new Date);
+  var date = new Date();
+  Cloud.PushNotifications.subscribeToken({
+    device_token : Ti.App.Properties.getString('deviceToken'),
+    channel : date,
+    user_id : user.emailId,
+    type : Ti.Platform.name === 'android' ? 'android' : 'ios'
+  }, function (e) {
+    if (e.success) {
+      // alert('Subscribed');
+      console.log('subscribed');
+    } else {
+      alert('Error:\n' + ((e.error && e.message) || JSON.stringify(e)));
+    }
+  });
 
   Cloud.Events.create({
     name: 'Car Pooling',
@@ -86,13 +138,13 @@ function createEvent(event) {
     user: user.emailId,
     custom_fields: {
       address: user.homeAddress,
-      userName: user.email,
+      username: user.email,
       coordinates : [lat, lng],
       seats: Number(event.seats),
       startTime: [Number(event.startHour), Number(event.startMin)],
       endTime: [event.endHour, event.endMin],
-      deviceToken: user.deviceToken || '', // TODO
-      channelId: user.channelId || '' //TODO
+      deviceToken: Ti.App.Properties.getString('deviceToken') || '', // TODO
+      channelId: date //TODO
     }
   }, function (event) {
 
