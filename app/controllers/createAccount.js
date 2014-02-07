@@ -52,7 +52,7 @@ function createAccount(event) {
 
     acsAccount(newUser, function (event) {
       if (event === 'success') {
-        $.createAccount.close();
+        // $.createAccount.close();
         Alloy.createController('mapView').getView().open();
 
       } else {
@@ -63,4 +63,9 @@ function createAccount(event) {
       }
     });
   });
+}
+
+function accountLogin() {
+
+  Alloy.createController('loginUser').getView().open();
 }
