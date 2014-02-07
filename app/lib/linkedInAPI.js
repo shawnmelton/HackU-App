@@ -13,5 +13,5 @@ var linkedInModule = require('linkedInMod');
 // MUST INITIALIZE WITH KEYS
 // GET KEYS AT https://developer.linkedin.com/apis
 //
-linkedInModule.init('dSeAkGDCNBrkguKP', '77zytegnewzwqt');
+linkedInModule.init('WgX1RXpI5KaXptr0', '77kr459ks645pi');
 module.exports = linkedInModule;

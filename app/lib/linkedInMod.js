@@ -1,11 +1,11 @@
 var linkedInModule = {};
 (function () {
     function auth(callback) {
-        adapter.loadAccessToken('linkedin');
+        adapter.loadAccessToken('linkedin2');
         if (adapter.isAuthorized() === false) {
             function postAuthorize() {
                 adapter.getAccessToken('https://api.linkedin.com/uas/oauth/accessToken');
-                adapter.saveAccessToken('linkedin');
+                adapter.saveAccessToken('linkedin2');
                 callback();
             };
 
@@ -13,7 +13,7 @@ var linkedInModule = {};
                 adapter.showAuthorizeUI('https://api.linkedin.com/uas/oauth/authorize?oauth_token=' + token, postAuthorize);
             };
 
-            adapter.getRequestToken('https://api.linkedin.com/uas/oauth/requestToken?scope=r_fullprofile', showAuthorize);
+            adapter.getRequestToken('https://api.linkedin.com/uas/oauth/requestToken?scope=r_fullprofile%20r_emailaddress', showAuthorize);
 
         } else callback && callback();
     }
@@ -55,9 +55,9 @@ var linkedInModule = {};
     },
     linkedInModule.getUser = function (callback) {
         linkedInModule.authorize(function () {
-            var e = adapter.loadAccessToken('linkedin');
+            var e = adapter.loadAccessToken('linkedin2');
             sendRequest(OAuthSimple().sign({
-                path: 'http://api.linkedin.com/v1/people/~:(first-name,last-name,headline,positions:(company))',
+                path: 'http://api.linkedin.com/v1/people/~:(first-name,last-name,headline,email-address,positions:(company))',
                 action: 'GET',
                 signatures: {
                     consumer_key: apiKey,

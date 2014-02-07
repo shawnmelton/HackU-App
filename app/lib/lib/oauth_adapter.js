@@ -230,7 +230,6 @@ var OAuthAdapter = function(pConsumerSecret, pConsumerKey, pSignatureMethod)
         Ti.API.info(tagSearch);
         if(tagSearch.length > 0) {
             pin = tagSearch[1]; 
-            alert(pin);
             if (receivePinCallback) setTimeout(receivePinCallback, 100);
             id = null;
             node = null;

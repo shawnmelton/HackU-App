@@ -78,7 +78,12 @@ function linkAccount() {
   var api = require('linkedInAPI');
   api.getUser(function (user) {
     user = JSON.parse(user);
+    Ti.API.info(user);
     $.name.value = user.firstName + ' ' + user.lastName;
+
+    if(user.emailAddress) {
+      $.emailId.value = user.emailAddress;
+    }
 
     if (user.positions && user.positions.values[0]) {
       $.company.value = user.positions.values[0].company.name;
