@@ -38,7 +38,7 @@ console.log(JSON.stringify(user));
 
 //TODO
 // need to pull all the requests.
-Cloud.Users.query({
+Cloud.Events.query({
   where: {
     coordinates: {'$nearSphere': [lat, lng], '$maxDistance': 0.00126}
   }
@@ -48,7 +48,7 @@ Cloud.Users.query({
 });
 
 var annotation, annotations = [];
-function updateMapView(acsData) {
+function updateMapView(acsEvents) {
 
   $.map.region = {
     latitude: Number(user.custom_fields.coordinates[0][0]),
@@ -59,16 +59,17 @@ function updateMapView(acsData) {
 
   $.map.annotations = [];
 
-  _.each(acsData.users, function (userData) {
-    console.log(userData);
+  _.each(acsEvents.events, function (userEvent) {
+    console.log(userEvent);
     annotation = Alloy.Globals.Map.createAnnotation({
-      latitude: Number(userData.custom_fields.coordinates[0][0]) || '',
-      longitude: Number(userData.custom_fields.coordinates[0][1]) || '',
-      title: userData.first_name || '',
-      subtitle: userData.custom_fields.address || '',
+      latitude: Number(userEvent.custom_fields.coordinates[0][0]) || '',
+      longitude: Number(userEvent.custom_fields.coordinates[0][1]) || '',
+      title: userEvent.custom_fields.userName + ' s: ' +
+      userEvent.custom_fields.seats,
+      subtitle: userEvent.custom_fields.address || '',
       pincolor: Alloy.Globals.Map.ANNOTATION_RED,
       animate: true,
-      user: userData
+      user: userEvent
     });
 
     annotations.push(annotation);
@@ -85,6 +86,7 @@ function createEvent(event) {
     user: user.emailId,
     custom_fields: {
       address: user.homeAddress,
+      userName: user.email,
       coordinates : [lat, lng],
       seats: Number(event.seats),
       startTime: [Number(event.startHour), Number(event.startMin)],
