@@ -13,16 +13,5 @@ var linkedInModule = require('linkedInMod');
 // MUST INITIALIZE WITH KEYS
 // GET KEYS AT https://developer.linkedin.com/apis
 //
-linkedInModule.init('tCTSMKiSV8XznPdD', '77klx3f1fgcdnb');
-    
-
-// THESE CALLS WRAP COMMON FUNCTIONS
-linkedInModule.getUser(function(_d) {
-    Ti.API.info(_d);
-});
-
-Alloy.Globals.liCall = function() {
-    linkedInModule.getUser(function(_d) {
-        Ti.API.info(_d);
-    });
-};
+linkedInModule.init('dSeAkGDCNBrkguKP', '77zytegnewzwqt');
+module.exports = linkedInModule;

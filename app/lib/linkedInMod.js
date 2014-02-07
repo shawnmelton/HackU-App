@@ -18,7 +18,7 @@ var linkedInModule = {};
         } else callback && callback();
     }
 
-    function g(a, b) {
+    function sendRequest(a, b) {
         var xhr = Ti.Network.createHTTPClient();
                 
         xhr.onload = function (a) {
@@ -34,23 +34,9 @@ var linkedInModule = {};
         
         xhr.open('GET', a.signed_url);
         xhr.setRequestHeader('Authorization', a.header);
-        xhr.setRequestHeader('Content-Type', 'text/xml;charset=UTF-8');
+        xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+        xhr.setRequestHeader('x-li-format', 'json');
         xhr.send();
-    }
-
-    function i(callback) {
-        var e = adapter.loadAccessToken('linkedin');
-        Ti.API.info(e);
-        g(OAuthSimple().sign({
-            path: 'https://api.linkedin.com/v1/people/~',
-            action: 'GET',
-            signatures: {
-                consumer_key: apiKey,
-                shared_secret: secretKey,
-                access_token: e.accessToken,
-                access_secret: e.accessTokenSecret
-            }
-        }), callback);
     }
 
     var adapter,
@@ -67,9 +53,19 @@ var linkedInModule = {};
     linkedInModule.authorize = function (a) {
         auth(a);
     },
-    linkedInModule.getUser = function (a) {
+    linkedInModule.getUser = function (callback) {
         linkedInModule.authorize(function () {
-            i(a);
+            var e = adapter.loadAccessToken('linkedin');
+            sendRequest(OAuthSimple().sign({
+                path: 'http://api.linkedin.com/v1/people/~:(first-name,last-name,headline,positions:(company))',
+                action: 'GET',
+                signatures: {
+                    consumer_key: apiKey,
+                    shared_secret: secretKey,
+                    access_token: e.accessToken,
+                    access_secret: e.accessTokenSecret
+                }
+            }), callback);
         });
     };
 })();
